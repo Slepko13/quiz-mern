@@ -37,7 +37,6 @@ const NewQuestion = ({ addNewQuestion }) => {
                                 className="form__question form-control"
                                 style={errors.new_question && touched.new_question ? { border: "1px solid red" } : null}
                                 name="new_question"
-                                placeholder={new_question}
                             />
                             {errors.new_question && touched.new_question ? <div className="error__message">
                                 <ErrorMessage name="new_question" />
@@ -50,7 +49,6 @@ const NewQuestion = ({ addNewQuestion }) => {
                                     className=" form-control"
                                     style={errors.new_answer_1 && touched.new_answer_1 ? { border: "1px solid red" } : null}
                                     name="new_answer_1"
-                                    placeholder={new_answer_1}
                                 />
                                 {errors.new_answer_1 && touched.new_answer_1 ? <div className="error__message">
                                     <ErrorMessage name="new_answer_1" />
@@ -61,7 +59,6 @@ const NewQuestion = ({ addNewQuestion }) => {
                                     className=" form-control"
                                     style={errors.new_answer_2 && touched.new_answer_2 ? { border: "1px solid red" } : null}
                                     name="new_answer_2"
-                                    placeholder={new_answer_2}
                                 />
                                 {errors.new_answer_2 && touched.new_answer_2 ? <div className="error__message">
                                     <ErrorMessage name="new_answer_2" />
@@ -72,7 +69,6 @@ const NewQuestion = ({ addNewQuestion }) => {
                                     className="form-control"
                                     style={errors.new_answer_3 && touched.new_answer_3 ? { border: "1px solid red" } : null}
                                     name="new_answer_3"
-                                    placeholder={new_answer_3}
                                 />
                                 {errors.new_answer_3 && touched.new_answer_3 ? <div className="error__message">
                                     <ErrorMessage name="new_answer_3" />
@@ -83,7 +79,6 @@ const NewQuestion = ({ addNewQuestion }) => {
                                     className=" form-control"
                                     style={errors.new_answer_4 && touched.new_answer_4 ? { border: "1px solid red" } : null}
                                     name="new_answer_4"
-                                    placeholder={new_answer_4}
                                 >
                                 </Field>
                                 {errors.new_answer_4 && touched.new_answer_4 ? <div className="error__message">
@@ -98,7 +93,6 @@ const NewQuestion = ({ addNewQuestion }) => {
                                     className=" form-control"
                                     style={errors.correct_answer && touched.correct_answer ? { border: "1px solid red" } : null}
                                     name="correct_answer"
-                                    placeholder={correct_answer}
                                 >
                                 </Field>
                                 {errors.correct_answer && touched.correct_answer ? <div className="error__message">
