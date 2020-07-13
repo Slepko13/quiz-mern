@@ -1,0 +1,76 @@
+.EditQuestion {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .form {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            @media screen and (max-width: 992px) {
+                font-size: 18px;
+            }
+        }
+        .inputWrapper {
+            position: relative;
+            width: 100%;
+            .error__message {
+                bottom: -5px;
+                left: 20px;
+                position: absolute;
+                background-color: white;
+                border-radius: 4px;
+                padding: 0 5px;
+                color: red;
+                font-size: 12px;
+                text-align: left;
+                z-index: 5;
+                &:after {
+                    content: "";
+                    border-width: 8px;
+                    border-color: transparent;
+                    border-style: solid;
+                    border-top-color: white;
+                    border-left-color: white;
+                    position: absolute;
+                    right: 10%;
+                    transform: translate(0, -30%) rotate(45deg);
+                }
+            }
+        }
+        .wrapper {
+            .inputWrapper {
+                position: relative;
+                width: 100%;
+                .error__message {
+                    bottom: -5px;
+                    left: 30px;
+                    position: absolute;
+                    background-color: white;
+                    border-radius: 4px;
+                    padding: 0 5px;
+                    color: red;
+                    font-size: 12px;
+                    text-align: left;
+                    z-index: 5;
+                    &:after {
+                        content: "";
+                        border-width: 8px;
+                        border-color: transparent;
+                        border-style: solid;
+                        border-top-color: white;
+                        border-left-color: white;
+                        position: absolute;
+                        right: 10%;
+                        transform: translate(0, -30%) rotate(45deg);
+                    }
+                }
+            }
+        }
+    }
+}
