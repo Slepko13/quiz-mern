@@ -1,0 +1,46 @@
+.Login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 80%;
+    .title {
+        margin-bottom: 40px;
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+    }
+    .test {
+        margin-bottom: 40px;
+    }
+    .inputWrapper {
+        position: relative;
+        width: 100%;
+        .error__message {
+            bottom: -10px;
+            left: 20px;
+            position: absolute;
+            background-color: white;
+            border-radius: 4px;
+            padding: 0 5px;
+            color: red;
+            font-size: 12px;
+            text-align: left;
+            z-index: 5;
+        }
+    }
+    .button {
+        margin-top: 20px;
+    }
+    .loginMessage {
+        font-size: 18px;
+        font-weight: bold;
+        margin-top: 20px;
+    }
+    .success {
+        color: green;
+    }
+    .error {
+        color: red;
+    }
+}

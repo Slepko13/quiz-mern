@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from 'axios';
 import './App.scss';
@@ -10,6 +10,7 @@ import logo from '../src/assets/img/mern-logo.png';
 import Questions from './components/Questions/Questions';
 import NewQuestion from './components/Questions/NewQuestion/NewQuestion';
 import EditQuestion from './components/Questions/EditQuestion/EditQuestion';
+import Login from './components/Login/Login';
 
 class App extends Component {
 
@@ -20,8 +21,10 @@ class App extends Component {
     runningQuestion: undefined,
     userAnswer: undefined,
     score: 0,
-    editQuestion: undefined,
     isOpen: false,
+    isAuth: false,
+    token: undefined,
+    loginMessage: null
   }
 
 
@@ -35,12 +38,50 @@ class App extends Component {
   editQuestion = this.editQuestion.bind(this);
   getQuestionById = this.getQuestionById.bind(this);
   toggleModal = this.toggleModal.bind(this);
+  login = this.login.bind(this);
+  logout = this.logout.bind(this);
 
   componentDidMount() {
     this.getQuestionsFromDB();
 
+    let token = localStorage.getItem('jwt');
+    if (token) {
+      this.setState({
+        isAuth: true,
+        token: localStorage.getItem('jwt')
+      })
+    }
+
   }
 
+  async login(email, password) {
+    try {
+      let response = await axios.post(`http://localhost:5000/auth/login`, { email, password });
+      localStorage.setItem('jwt', response.data.token);
+      console.log(response);
+      this.setState({
+        isAuth: true,
+        token: localStorage.getItem('jwt'),
+        loginMessage: response.data.message
+      })
+      this.getQuestionsFromDB();
+    } catch (error) {
+      this.setState({
+        loginMessage: error.response.data.message,
+        isAuth: false
+      })
+    }
+  }
+
+  async logout() {
+    localStorage.removeItem('jwt');
+    this.setState({
+      isAuth: false,
+      token: undefined,
+      loginMessage: null
+    })
+
+  }
 
   //!get questions from Mongo DB (cloud)
   async getQuestionsFromDB() {
@@ -54,7 +95,7 @@ class App extends Component {
         editQuestion: undefined
       })
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
   }
 
@@ -71,36 +112,49 @@ class App extends Component {
   }
 
   async editQuestion(id, question, answer_1, answer_2, answer_3, answer_4, correct) {
+    let token = localStorage.getItem('jwt');
+    const editQuestion = {
+      question: question,
+      answers: [answer_1, answer_2, answer_3, answer_4],
+      correct_answers: [correct]
+    }
     try {
-      const editQuestion = {
-        question: question,
-        answers: [answer_1, answer_2, answer_3, answer_4],
-        correct_answers: [correct]
-      }
-      await axios.post(`http://localhost:5000/questions/update/${id}`, editQuestion);
+
+      await axios.post(`http://localhost:5000/questions/update/${id}`, editQuestion, { headers: { Authorization: token } });
       this.getQuestionsFromDB();
     } catch (error) {
       console.log(error);
     }
   }
 
-  async removeQuestion(id) {
+  async removeQuestion(id, history) {
+    let token = localStorage.getItem('jwt');
+
     try {
-      await axios.delete(`http://localhost:5000/questions/${id}`);
+      await axios.delete(`http://localhost:5000/questions/${id}`, { headers: { Authorization: token } });
       await this.getQuestionsFromDB();
     } catch (error) {
       console.log(error);
     }
+
+
+
   }
 
   async addNewQuestion(question, answer_1, answer_2, answer_3, answer_4, correct) {
+    let token = localStorage.getItem('jwt');
+    axios.defaults.headers.common = { 'Authorization': token }
+
+    const newQuestion = {
+      question: question,
+      answers: [answer_1, answer_2, answer_3, answer_4],
+      correct_answers: [correct]
+    }
     try {
-      const newQuestion = {
-        question: question,
-        answers: [answer_1, answer_2, answer_3, answer_4],
-        correct_answers: [correct]
-      }
-      await axios.post(`http://localhost:5000/questions/add`, newQuestion);
+      await axios.post(`http://localhost:5000/questions/add`,
+        newQuestion
+
+      );
       this.getQuestionsFromDB();
     } catch (error) {
       console.log(error);
@@ -185,9 +239,20 @@ class App extends Component {
                       to="/questions"
                       className="nav-link"
                       onClick={this.getQuestionsFromDB}
-
                     >Редагувати опитувальник</Link>
                   </li>
+                  {this.state.isAuth ?
+                    <li className="navbar-item">
+                      <Link
+                        to="/"
+                        className="nav-link"
+                        onClick={this.logout}
+                      >Вийти з системи</Link>
+                    </li> :
+                    <Link
+                      to="/login"
+                      className="nav-link"
+                    >Увійти</Link>}
                 </ul>
               </div>
             </nav>
@@ -214,18 +279,35 @@ class App extends Component {
               }
             </Route>
             <Route path="/questions">
+
               <Questions
                 questions={this.state.questions}
                 removeQuestion={this.removeQuestion}
                 getQuestionById={this.getQuestionById}
+                token={this.state.token}
               />
+
             </Route>
             <Route path="/add">
-              <NewQuestion
-                addNewQuestion={this.addNewQuestion}
+              {this.state.token ?
+                <NewQuestion
+                  addNewQuestion={this.addNewQuestion}
+                /> :
+                <Redirect
+                  to={'/login'}
+                />
+              }
+
+            </Route>
+            <Route path="/login">
+              <Login
+                login={this.login}
+                loginMessage={this.state.loginMessage}
+                isAuth={this.state.isAuth}
               />
             </Route>
-            <Route path="/edit/:id" history={this.history}>
+            <Route path="/edit/:id"
+              history={this.history}>
               {this.state.editQuestion ?
                 <EditQuestion
                   question={this.state.editQuestion}

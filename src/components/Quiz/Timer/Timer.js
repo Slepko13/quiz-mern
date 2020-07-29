@@ -28,7 +28,7 @@ const Timer = ({ nextQuestion, lastQuestionIndex, runningQuestionIndex, history,
                 }, 1000)
         }
         return () => clearInterval(id);
-    }, [count, nextQuestion]);
+    }, [count, nextQuestion, getResult, history, lastQuestionIndex, runningQuestionIndex]);
     return (
         <div className="Timer">
             <div

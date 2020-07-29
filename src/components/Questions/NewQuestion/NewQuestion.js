@@ -4,8 +4,7 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import YupSchema from '../YupSchema';
 
 const NewQuestion = ({ addNewQuestion }) => {
-    let new_question;
-    let new_answer_1, new_answer_2, new_answer_3, new_answer_4, correct_answer;
+
     return (
         <div className="NewQuestion">
 

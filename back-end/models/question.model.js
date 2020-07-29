@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-let QuestionSchema = new Schema({
+let questionSchema = new Schema({
 
     question: {
         type: String
@@ -10,4 +10,5 @@ let QuestionSchema = new Schema({
     correct_answers: [String]
 });
 
-module.exports = mongoose.model('question', QuestionSchema); 
+module.exports =
+    mongoose.model('question', questionSchema); 

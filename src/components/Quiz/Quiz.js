@@ -11,8 +11,7 @@ const Quiz = (props) => {
         handleAnswer,
         userAnswer,
         getResult,
-        counter,
-        runCounter
+
     } = props;
 
     return (

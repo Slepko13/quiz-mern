@@ -5,7 +5,12 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import YupSchema from '../YupSchema';
 
 const EditQuestion = ({ question, editQuestion, history }) => {
-    let { _id: id, question: new_question, answers: [new_answer_1, new_answer_2, new_answer_3, new_answer_4], correct_answers: [correct_answer] } = question;
+    let {
+        _id: id,
+        question: new_question,
+        answers: [new_answer_1, new_answer_2, new_answer_3, new_answer_4],
+        correct_answers: [correct_answer]
+    } = question;
 
 
     return (

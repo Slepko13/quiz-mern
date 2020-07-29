@@ -1,8 +1,8 @@
 import React from 'react';
 import './Questions.scss';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 
-const Questions = ({ questions, removeQuestion, getQuestionById }) => {
+const Questions = ({ questions, removeQuestion, getQuestionById, history, token }) => {
     return (
         <div className="Questions">
             <div className="title">
@@ -20,17 +20,31 @@ const Questions = ({ questions, removeQuestion, getQuestionById }) => {
                         <div key={question.question + index} className="question">
                             <div className="question__title">{question.question}</div>
                             <div className="button__wrapper d-flex">
-                                <button
-                                    className="question__delete btn btn-danger m-2"
-                                    onClick={() => { removeQuestion(question._id) }}
-                                >Видалити</button>
+                                {token ?
+                                    <button
+                                        className="question__delete btn btn-danger m-2"
+                                        onClick={() => { removeQuestion(question._id) }}
+                                    >Видалити</button>
+                                    :
+                                    <button
+                                        className="question__delete btn btn-danger m-2"
+                                        onClick={() => { history.push('/login') }}
+                                    >Видалити</button>
+                                }
                                 <button
                                     className="question__edit btn btn-warning m-2">
-                                    <Link
-                                        onClick={() => { getQuestionById(question._id) }}
-                                        style={{ color: "white", textDecoration: "none" }}
-                                        to={'/edit/' + question._id}
-                                    >Редагувати</Link>
+                                    {token ?
+                                        <Link
+                                            style={{ color: "white", textDecoration: "none" }}
+                                            onClick={() => { getQuestionById(question._id) }}
+                                            to={'/edit/' + question._id}
+                                        >Редагувати</Link>
+                                        :
+                                        <Link
+                                            style={{ color: "white", textDecoration: "none" }}
+                                            to={'/login'}
+                                        > Редагувати</Link>
+                                    }
                                 </button>
                             </div>
 
@@ -41,8 +55,8 @@ const Questions = ({ questions, removeQuestion, getQuestionById }) => {
             </div>
 
 
-        </div>
+        </div >
     );
 }
 
-export default Questions;
+export default withRouter(Questions);
