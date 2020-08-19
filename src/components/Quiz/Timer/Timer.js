@@ -16,7 +16,7 @@ const Timer = ({ nextQuestion, lastQuestionIndex, runningQuestionIndex, history,
         let id = setInterval(() => {
             setCount(count + 1);
         }, 1000);
-        if (count === 10) {
+        if (count === 5) {
             runningQuestionIndex <= lastQuestionIndex - 1 ?
                 setTimeout(() => {
                     nextQuestion();
@@ -35,7 +35,7 @@ const Timer = ({ nextQuestion, lastQuestionIndex, runningQuestionIndex, history,
                 className="counter"
             >{count}</div>
             <div className="btimeGauge">
-                <div className="timeGauge" style={{ width: `${count * 25}px` }}></div>
+                <div className="timeGauge" style={{ width: `${count * 50}px` }}></div>
             </div>
         </div>
     );

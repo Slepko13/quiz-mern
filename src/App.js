@@ -129,16 +129,12 @@ class App extends Component {
 
   async removeQuestion(id, history) {
     let token = localStorage.getItem('jwt');
-
     try {
       await axios.delete(`http://localhost:5000/questions/${id}`, { headers: { Authorization: token } });
-      await this.getQuestionsFromDB();
+      this.getQuestionsFromDB();
     } catch (error) {
       console.log(error);
     }
-
-
-
   }
 
   async addNewQuestion(question, answer_1, answer_2, answer_3, answer_4, correct) {

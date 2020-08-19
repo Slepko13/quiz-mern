@@ -47,14 +47,10 @@ const Questions = ({ questions, removeQuestion, getQuestionById, history, token 
                                     }
                                 </button>
                             </div>
-
                         </div>
                     )
                 })}
-
             </div>
-
-
         </div >
     );
 }
