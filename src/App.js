@@ -24,7 +24,8 @@ class App extends Component {
     isOpen: false,
     isAuth: false,
     token: undefined,
-    loginMessage: null
+    loginMessage: null,
+    test: null
   }
 
 
