@@ -12,6 +12,8 @@ import NewQuestion from './components/Questions/NewQuestion/NewQuestion';
 import EditQuestion from './components/Questions/EditQuestion/EditQuestion';
 import Login from './components/Login/Login';
 
+import { connect } from 'react-redux';
+
 class App extends Component {
 
   state = {
@@ -77,7 +79,7 @@ class App extends Component {
     }
   }
 
-  async logout() {
+  logout() {
     localStorage.removeItem('jwt');
     this.setState({
       isAuth: false,
@@ -205,7 +207,7 @@ class App extends Component {
 
   toggleModal() {
     this.setState({
-      isOpen: ~this.state.isOpen
+      isOpen: this.state.isOpen
     })
   }
   render() {
@@ -258,9 +260,7 @@ class App extends Component {
             </nav>
             <Route path="/" exact >
               <Start
-                getQuestions={this.getQuestions}//!get questions with import from local json file
-                getQuestionsAxios={this.getQuestionsAxios}//!get questions with axios from local json file
-                getQuestionsFromDB={this.getQuestionsFromDB}//!get questions from Mongo DB(cloud)
+                getQuestionsFromDB={this.getQuestionsFromDB}
               />
             </Route>
             <Route path="/quiz">
@@ -273,13 +273,11 @@ class App extends Component {
                   handleAnswer={this.handleAnswer}
                   userAnswer={this.state.userAnswer}
                   getResult={this.getResult}
-
                 /> :
                 <div className="loading__data">Розпочни знову</div>
               }
             </Route>
             <Route path="/questions">
-
               <Questions
                 questions={this.state.questions}
                 removeQuestion={this.removeQuestion}
