@@ -43,6 +43,7 @@ class App extends Component {
 
   componentDidMount() {
     this.getQuestionsFromDB();
+    this.foo()
 
     let token = localStorage.getItem('jwt');
     if (token) {
@@ -52,6 +53,9 @@ class App extends Component {
       })
     }
 
+  }
+  foo() {
+    console.log("Redux store");
   }
 
   async login(email, password) {
