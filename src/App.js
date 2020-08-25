@@ -12,7 +12,8 @@ import NewQuestion from './components/Questions/NewQuestion/NewQuestion';
 import EditQuestion from './components/Questions/EditQuestion/EditQuestion';
 import Login from './components/Login/Login';
 
-import { connect } from 'react-redux';
+import { authApi, questionsApi } from './api/api';
+import Navbar from './components/Navbar/Navbar';
 
 class App extends Component {
 
@@ -26,7 +27,8 @@ class App extends Component {
     isOpen: false,
     isAuth: false,
     token: undefined,
-    loginMessage: null
+    loginMessage: null,
+    test: null
   }
 
 
@@ -47,7 +49,7 @@ class App extends Component {
     this.getQuestionsFromDB();
     this.foo()
 
-    let token = localStorage.getItem('jwt');
+    const token = localStorage.getItem('jwt');
     if (token) {
       this.setState({
         isAuth: true,
@@ -62,7 +64,8 @@ class App extends Component {
 
   async login(email, password) {
     try {
-      let response = await axios.post(`http://localhost:5000/auth/login`, { email, password });
+      const response = await authApi.login(email, password);
+
       localStorage.setItem('jwt', response.data.token);
       console.log(response);
       this.setState({
@@ -92,12 +95,11 @@ class App extends Component {
   //!get questions from Mongo DB (cloud)
   async getQuestionsFromDB() {
     try {
-      let response = await axios.get('http://localhost:5000/questions/');
-      let q = response.data;
+      const questions = await questionsApi.getQuestionsFromDB();
       this.setState({
-        questions: q,
-        lastQuestionIndex: q.length - 1,
-        runningQuestion: q[0],
+        questions,
+        lastQuestionIndex: questions.length - 1,
+        runningQuestion: questions[0],
         editQuestion: undefined
       })
     } catch (error) {
@@ -107,10 +109,9 @@ class App extends Component {
 
   async getQuestionById(id) {
     try {
-      let response = await axios.get(`http://localhost:5000/questions/${id}`);
-      let q = response.data;
+      const question = await questionsApi.getQuestionById(id);
       this.setState({
-        editQuestion: q
+        editQuestion: question
       })
     } catch (error) {
       console.log(error);
@@ -118,33 +119,32 @@ class App extends Component {
   }
 
   async editQuestion(id, question, answer_1, answer_2, answer_3, answer_4, correct) {
-    let token = localStorage.getItem('jwt');
+    const token = localStorage.getItem('jwt');
     const editQuestion = {
       question: question,
       answers: [answer_1, answer_2, answer_3, answer_4],
       correct_answers: [correct]
     }
     try {
-
-      await axios.post(`http://localhost:5000/questions/update/${id}`, editQuestion, { headers: { Authorization: token } });
+      await questionsApi.editQuestion(id, editQuestion, token);
       this.getQuestionsFromDB();
     } catch (error) {
       console.log(error);
     }
   }
 
-  async removeQuestion(id, history) {
-    let token = localStorage.getItem('jwt');
+  async removeQuestion(id) {
+    const token = localStorage.getItem('jwt');
     try {
-      await axios.delete(`http://localhost:5000/questions/${id}`, { headers: { Authorization: token } });
-      this.getQuestionsFromDB();
+      await questionsApi.removeQuestion(id, token);
+      await this.getQuestionsFromDB();
     } catch (error) {
       console.log(error);
     }
   }
 
   async addNewQuestion(question, answer_1, answer_2, answer_3, answer_4, correct) {
-    let token = localStorage.getItem('jwt');
+    const token = localStorage.getItem('jwt');
     axios.defaults.headers.common = { 'Authorization': token }
 
     const newQuestion = {
@@ -153,10 +153,7 @@ class App extends Component {
       correct_answers: [correct]
     }
     try {
-      await axios.post(`http://localhost:5000/questions/add`,
-        newQuestion
-
-      );
+      await questionsApi.addNewQuestion(newQuestion);
       this.getQuestionsFromDB();
     } catch (error) {
       console.log(error);
@@ -215,49 +212,14 @@ class App extends Component {
       <Router>
         <div className="App">
           <div className="container">
-            <nav className="navbar navbar-expand-lg navbar-light bg-light ">
-              <a className="navbar-brand " href="http://www.google.com" target="blank">
-                <img src={logo} alt="logo" width="150" />
-              </a>
-              <button
-                className="navbar-toggler"
-                type="button"
-                onClick={this.toggleModal}
-              >
-                <span className="navbar-toggler-icon"></span>
-              </button>
-              <div className={this.state.isOpen ? "navbar-collapse collapse show justify-content-end" :
-                "navbar-collapse collapse justify-content-end"}>
-                <ul className="navbar-nav  ">
-                  <li className="navbar-item">
-                    <Link
-                      to="/"
-                      className="nav-link"
-                      onClick={this.resetState}
-                    >Розпочати знову</Link>
-                  </li>
-                  <li className="navbar-item">
-                    <Link
-                      to="/questions"
-                      className="nav-link"
-                      onClick={this.getQuestionsFromDB}
-                    >Редагувати опитувальник</Link>
-                  </li>
-                  {this.state.isAuth ?
-                    <li className="navbar-item">
-                      <Link
-                        to="/"
-                        className="nav-link"
-                        onClick={this.logout}
-                      >Вийти з системи</Link>
-                    </li> :
-                    <Link
-                      to="/login"
-                      className="nav-link"
-                    >Увійти</Link>}
-                </ul>
-              </div>
-            </nav>
+            <Navbar
+              toggleModal={this.toggleModal}
+              isOpen={this.state.isOpen}
+              resetState={this.resetState}
+              getQuestionsFromDB={this.getQuestionsFromDB}
+              isAuth={this.state.isAuth}
+              logout={this.logout}
+            />
             <Route path="/" exact >
               <Start
                 getQuestionsFromDB={this.getQuestionsFromDB}
@@ -284,7 +246,6 @@ class App extends Component {
                 getQuestionById={this.getQuestionById}
                 token={this.state.token}
               />
-
             </Route>
             <Route path="/add">
               {this.state.token ?
@@ -295,7 +256,6 @@ class App extends Component {
                   to={'/login'}
                 />
               }
-
             </Route>
             <Route path="/login">
               <Login
