@@ -9,6 +9,9 @@ import { Link } from 'react-router-dom';
 import './Navbar.scss';
 
 const Navbar = ({ toggleModal, isOpen, resetState, getQuestionsFromDB, isAuth, logout }) => {
+    console.log("isAuth", isAuth);
+    console.log("logout", logout);
+
     return (
         <div className="Navbar">
             <nav className="navbar navbar-expand-lg navbar-light bg-light ">

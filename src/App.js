@@ -10,25 +10,27 @@ import logo from '../src/assets/img/mern-logo.png';
 import Questions from './components/Questions/Questions';
 import NewQuestion from './components/Questions/NewQuestion/NewQuestion';
 import EditQuestion from './components/Questions/EditQuestion/EditQuestion';
-import Login from './components/Login/Login';
+// import Login from './components/Login/Login';
+import Login from './components/Login/LoginContainer';
 
 import { authApi, questionsApi } from './api/api';
-import Navbar from './components/Navbar/Navbar';
+// import Navbar from './components/Navbar/Navbar';
+import Navbar from './components/Navbar/NavbarContainer';
 
 class App extends Component {
 
   state = {
     questions: [],
+    editQuestion: null,
     runningQuestionIndex: 0,
     lastQuestionIndex: undefined,
     runningQuestion: undefined,
     userAnswer: undefined,
     score: 0,
-    isOpen: false,
+    // isOpen: false,//?removed in customReducer`s state
     isAuth: false,
     token: undefined,
     loginMessage: null,
-    test: null
   }
 
 
@@ -41,13 +43,12 @@ class App extends Component {
   addNewQuestion = this.addNewQuestion.bind(this);
   editQuestion = this.editQuestion.bind(this);
   getQuestionById = this.getQuestionById.bind(this);
-  toggleModal = this.toggleModal.bind(this);
+  // toggleModal = this.toggleModal.bind(this);
   login = this.login.bind(this);
   logout = this.logout.bind(this);
 
   componentDidMount() {
     this.getQuestionsFromDB();
-    this.foo()
 
     const token = localStorage.getItem('jwt');
     if (token) {
@@ -56,22 +57,22 @@ class App extends Component {
         token: localStorage.getItem('jwt')
       })
     }
+  }
 
-  }
-  foo() {
-    console.log("Redux store");
-  }
 
   async login(email, password) {
     try {
-      const response = await authApi.login(email, password);
+      // const response = await authApi.login(email, password);
+      // localStorage.setItem('jwt', response.data.token);
 
-      localStorage.setItem('jwt', response.data.token);
-      console.log(response);
+      const { data: { token, message } } = await authApi.login(email, password);
+      localStorage.setItem('jwt', token);
+
+      console.log(token);
       this.setState({
         isAuth: true,
         token: localStorage.getItem('jwt'),
-        loginMessage: response.data.message
+        loginMessage: message
       })
       this.getQuestionsFromDB();
     } catch (error) {
@@ -162,7 +163,6 @@ class App extends Component {
 
   nextQuestion() {
     if (this.state.userAnswer === this.state.runningQuestion.correct_answers[0]) {
-
       this.setState((prevState) => ({
         score: prevState.score++,
         count: 0
@@ -183,6 +183,7 @@ class App extends Component {
       }));
     }
   }
+
   resetState() {
     this.setState({
       questions: [],
@@ -191,7 +192,7 @@ class App extends Component {
       runningQuestion: undefined,
       userAnswer: undefined,
       score: 0,
-      editQuestion: undefined
+      // editQuestion: undefined
 
     })
   }
@@ -201,24 +202,25 @@ class App extends Component {
       userAnswer: e.target.value
     })
   }
-
-  toggleModal() {
-    this.setState({
-      isOpen: this.state.isOpen
-    })
-  }
+  //? Removed customActions 
+  // toggleModal() {
+  //   console.log(this.state.isOpen);
+  //   this.setState({
+  //     isOpen: !this.state.isOpen
+  //   })
+  // }
   render() {
     return (
       <Router>
         <div className="App">
           <div className="container">
             <Navbar
-              toggleModal={this.toggleModal}
-              isOpen={this.state.isOpen}
+              // toggleModal={this.toggleModal}
+              // isOpen={this.state.isOpen}
               resetState={this.resetState}
               getQuestionsFromDB={this.getQuestionsFromDB}
               isAuth={this.state.isAuth}
-              logout={this.logout}
+            // logout={this.logout}
             />
             <Route path="/" exact >
               <Start
@@ -259,9 +261,9 @@ class App extends Component {
             </Route>
             <Route path="/login">
               <Login
-                login={this.login}
-                loginMessage={this.state.loginMessage}
-                isAuth={this.state.isAuth}
+              // login={this.login}
+              // loginMessage={this.state.loginMessage}
+              // isAuth={this.state.isAuth}
               />
             </Route>
             <Route path="/edit/:id"

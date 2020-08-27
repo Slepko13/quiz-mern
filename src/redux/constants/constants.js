@@ -1,0 +1,12 @@
+export const GET_QUESTIONS = 'GET-QUESTIONS';
+export const ADD_QUESTION = 'ADD-QUESTION';
+export const UPDATE_QUESTION = 'UPDATE-QUESTION';
+export const REMOVE_QUESTION = 'REMOVE-QUESTION';
+
+export const LOGIN_SUCCESS = "LOGIN-SUCCESS";
+export const LOGIN_FAILED = "LOGIN-FAILED";
+
+export const LOGOUT = 'LOGOUT';
+
+export const RESET_STATE = 'RESET-STATE';
+export const TOGGLE_MODAL = 'TOGGLE-MODAL';

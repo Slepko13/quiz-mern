@@ -6,7 +6,11 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import './Login.scss';
 
 
-const Login = ({ login, history, loginMessage, isAuth }) => {
+const Login = (
+    { login, history, loginMessage, isAuth, loginThunk }
+
+) => {
+    console.log(login);
     return (
         <div className="Login">
             <div className="title">Для продовження роботи необхідна авторизація</div>
@@ -60,18 +64,15 @@ const Login = ({ login, history, loginMessage, isAuth }) => {
                                 style={errors.password && touched.password ? { border: "1px solid red" } : null}
                                 name="password"
                                 placeholder="Введіть пароль"
-
                             />
                             {errors.password && touched.password ? <div className="error__message">
                                 <ErrorMessage name="password" />
                             </div> : null}
                         </div>
-
                         <button
                             className=" btn btn-primary button"
                             type="submit"
                         >Увійти</button>
-
                     </Form>
                 )}
             </Formik>
@@ -80,4 +81,4 @@ const Login = ({ login, history, loginMessage, isAuth }) => {
     );
 }
 
-export default withRouter(Login);
+export default Login;
