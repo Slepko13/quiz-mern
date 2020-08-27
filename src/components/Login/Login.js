@@ -2,14 +2,10 @@ import React from 'react';
 import * as Yup from "yup";
 import { withRouter } from 'react-router-dom';
 import { Formik, Field, Form, ErrorMessage } from "formik";
-
 import './Login.scss';
 
 
-const Login = (
-    { login, history, loginMessage, isAuth, loginThunk }
-
-) => {
+const Login = ({ login, loginMessage, isAuth }) => {
     console.log(login);
     return (
         <div className="Login">
@@ -18,8 +14,6 @@ const Login = (
                 <div className="tets__email">Тестова пошта: <b> test@gmail.com</b></div>
                 <div className="tets__password">Тестовий пароль: <b>test12345</b> </div>
             </div>
-
-
             <Formik
                 initialValues={{
                     email: '',

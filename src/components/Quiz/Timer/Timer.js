@@ -9,7 +9,6 @@ const Timer = ({ nextQuestion, lastQuestionIndex, runningQuestionIndex, history,
     let [count, setCount] = useState(0);
     useEffect(() => {
         setCount(0);
-
     }, [runningQuestionIndex]);
 
     useEffect(() => {
@@ -28,7 +27,7 @@ const Timer = ({ nextQuestion, lastQuestionIndex, runningQuestionIndex, history,
                 }, 1000)
         }
         return () => clearInterval(id);
-    }, [count, nextQuestion, getResult, history, lastQuestionIndex, runningQuestionIndex]);
+    }, [count, history, lastQuestionIndex, runningQuestionIndex]);
     return (
         <div className="Timer">
             <div

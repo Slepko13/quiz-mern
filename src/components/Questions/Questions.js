@@ -2,7 +2,8 @@ import React from 'react';
 import './Questions.scss';
 import { Link, withRouter } from 'react-router-dom';
 
-const Questions = ({ questions, removeQuestion, getQuestionById, history, token }) => {
+const Questions = ({ questions, removeQuestion, getQuestionById, history }) => {
+    const token = localStorage.getItem('jwt');//?temporary ? token is removed in authReducer
     return (
         <div className="Questions">
             <div className="title">
