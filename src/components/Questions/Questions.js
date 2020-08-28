@@ -17,9 +17,7 @@ let Questions = ({ questions, history, token,
             </div>
             <div className="questions">
                 {questions.map((question, index) => {
-                    if (index === 5) {
-                        console.log("Yo", question.correct_answers);
-                    }
+
                     return (
                         <div key={question.question + index} className="question">
                             <div className="question__title">{question.question}</div>

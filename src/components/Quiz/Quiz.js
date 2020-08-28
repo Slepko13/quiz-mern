@@ -3,16 +3,13 @@ import './Quiz.scss';
 import { Link } from 'react-router-dom';
 import Timer from './Timer/Timer';
 
-const Quiz = (props) => {
-    let { runningQuestion: { question, answers },
-        runningQuestionIndex,
-        lastQuestionIndex,
-        nextQuestion,
-        handleAnswer,
-        userAnswer,
-        getResult,
-
-    } = props;
+const Quiz = ({
+    runningQuestion: { question, answers, correct_answers: [correct] },
+    runningQuestionIndex, lastQuestionIndex, score,
+    userAnswer, handleAnswer,
+    nextQuestionThunk, getResultThunk
+}) => {
+    console.log("runningQuestionIndex", runningQuestionIndex);
 
     return (
         <div className="Quiz">
@@ -42,20 +39,26 @@ const Quiz = (props) => {
             </form>
             <div className="bottom__wrapper">
                 <Timer
-                    nextQuestion={nextQuestion}
+                    nextQuestionThunk={nextQuestionThunk}
                     runningQuestionIndex={runningQuestionIndex}
                     lastQuestionIndex={lastQuestionIndex}
-                    getResult={getResult}
+                    getResultThunk={getResultThunk}
+                    userAnswer={userAnswer}
+                    correct={correct}
                 />
                 <div className="progress__wrapper">
                     <div className="prog">Прогрес: {runningQuestionIndex + 1}/{lastQuestionIndex + 1}</div>
                     {runningQuestionIndex <= lastQuestionIndex - 1 ?
                         <button
-                            onClick={nextQuestion}
+                            onClick={() => { nextQuestionThunk(userAnswer, correct) }}
                             className="btn btn-primary result__button"
                         >Наступне запитання</button> :
                         <button className="result__button btn btn-danger">
-                            <Link to='/result' className="result__link" onClick={getResult}> Отримати результат</Link>
+                            <Link
+                                to='/result'
+                                className="result__link"
+                                onClick={() => { getResultThunk(userAnswer, correct) }}
+                            > Отримати результат</Link>
                         </button>
                     }
                 </div>

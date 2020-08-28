@@ -3,7 +3,7 @@ import './NewQuestion.scss';
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import YupSchema from '../YupSchema';
 
-const NewQuestion = ({ addNewQuestion }) => {
+const NewQuestion = ({ addNewQuestionThunk }) => {
 
     return (
         <div className="NewQuestion">
@@ -23,7 +23,7 @@ const NewQuestion = ({ addNewQuestion }) => {
                     setTimeout(() => {
                         resetForm();
                     }, 400);
-                    addNewQuestion(new_question, new_answer_1, new_answer_2, new_answer_3, new_answer_4, correct_answer);
+                    addNewQuestionThunk(new_question, new_answer_1, new_answer_2, new_answer_3, new_answer_4, correct_answer);
 
                 }}
             >

@@ -5,7 +5,8 @@ import './Timer.scss';
 
 
 
-const Timer = ({ nextQuestion, lastQuestionIndex, runningQuestionIndex, history, getResult }) => {
+const Timer = ({ nextQuestionThunk, getResultThunk, userAnswer, correct,
+    lastQuestionIndex, runningQuestionIndex, history, }) => {
     let [count, setCount] = useState(0);
     useEffect(() => {
         setCount(0);
@@ -18,16 +19,16 @@ const Timer = ({ nextQuestion, lastQuestionIndex, runningQuestionIndex, history,
         if (count === 5) {
             runningQuestionIndex <= lastQuestionIndex - 1 ?
                 setTimeout(() => {
-                    nextQuestion();
+                    nextQuestionThunk(userAnswer, correct);
                     setCount(0);
                 }, 1000) :
                 setTimeout(() => {
-                    getResult();
+                    getResultThunk(userAnswer, correct);
                     history.push('./result')
                 }, 1000)
         }
         return () => clearInterval(id);
-    }, [count, history, lastQuestionIndex, runningQuestionIndex]);
+    }, [count, history, lastQuestionIndex, runningQuestionIndex, nextQuestionThunk, getResultThunk]);
     return (
         <div className="Timer">
             <div

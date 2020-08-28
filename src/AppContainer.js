@@ -14,7 +14,6 @@ const mapStateToProps = state => {
         userAnswer: state.questions.userAnswer,
         editQuestion: state.questions.editQuestion,
         score: state.questions.score,
-        editQuestion: state.questions.editQuestion
     }
 }
 

@@ -57,18 +57,16 @@ const questionsReducer = (state = initialState, action) => {
         case NEXT_QUESTION:
             return {
                 ...state,
-                runningQuestion: state.questions[state.runningQuestionIndex],
-                runningQuestionIndex: state.runningQuestionIndex++,
+                runningQuestion: state.questions[state.runningQuestionIndex + 1],
+                runningQuestionIndex: state.runningQuestionIndex + 1,
                 userAnswer: null,
                 count: 0
-
             }
         case GET_RESULT:
             return {
                 ...state,
                 score: state.score + 1,
                 count: 0
-
             }
         default:
             return state

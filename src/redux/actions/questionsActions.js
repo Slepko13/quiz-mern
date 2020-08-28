@@ -3,9 +3,9 @@ import axios from 'axios';
 import {
     GET_QUESTIONS_SUCCESS, GET_QUESTIONS_FAILED,
     GET_QUESTION_BY_ID_SUCCESS, GET_QUESTION_BY_ID_FAILED,
-    ADD_QUESTION_SUCCESS, ADD_QUESTION_FAILED,
-    REMOVE_QUESTION_FAILED, REMOVE_QUESTION_SUCCESS,
-    UPDATE_QUESTION_SUCCESS, UPDATE_QUESTION_FAILED,
+    // ADD_QUESTION_SUCCESS, ADD_QUESTION_FAILED,
+    // REMOVE_QUESTION_FAILED, REMOVE_QUESTION_SUCCESS,
+    // UPDATE_QUESTION_SUCCESS, UPDATE_QUESTION_FAILED,
     RESET_STATE, HANDLE_ANSWER,
     GET_RESULT, NEXT_QUESTION
 
@@ -84,6 +84,7 @@ export const editQuestionThunk = (id, question, answer_1, answer_2, answer_3, an
             await questionsApi.editQuestion(id, editQuestion, token);
             console.log("EDIT question thunk");
 
+            dispatch(getQuestionByIdThunk(id));
             dispatch(getQuestionsFromDBThunk());
 
         } catch (error) {
@@ -100,7 +101,6 @@ export const removeQuestionThunk = (id) => {
             await questionsApi.removeQuestion(id, token);
             dispatch(getQuestionsFromDBThunk());
             console.log("REMOVE question  thunk");
-
         } catch (error) {
             console.log(error);
         }
@@ -152,17 +152,15 @@ export const nextQuestionThunk = (userAnswer, correct) => {
         }
         dispatch(nextQuestion())
         console.log("NEXT  thunk");
+        console.log("User answer", userAnswer);
+        console.log("Correct", correct);
+
 
     }
 }
-
-export const getResultThunk = (userAnswer, correct) => {
-    return dispatch => {
-        if (userAnswer === correct) {
-            dispatch(getResult())
-        }
-        console.log("RESULT thunk");
-
+const nextQuestion = () => {
+    return {
+        type: NEXT_QUESTION
     }
 }
 const getResult = () => {
@@ -170,9 +168,15 @@ const getResult = () => {
         type: GET_RESULT
     }
 }
-
-const nextQuestion = () => {
-    return {
-        type: NEXT_QUESTION
+export const getResultThunk = (userAnswer, correct) => {
+    return dispatch => {
+        if (userAnswer === correct) {
+            dispatch(getResult())
+        }
+        console.log("RESULT thunk");
+        console.log("User answer", userAnswer);
+        console.log("Correct", correct);
     }
 }
+
+
