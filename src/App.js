@@ -2,36 +2,46 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from 'axios';
+import { connect } from 'react-redux';
 import { authApi, questionsApi } from './api/api';
 import './App.scss';
-import Start from './components/Start/Start';
+
 import Quiz from './components/Quiz/Quiz';
 import Result from './components/Result/Result';
 import logo from '../src/assets/img/mern-logo.png';
-import Questions from './components/Questions/Questions';
 import NewQuestion from './components/Questions/NewQuestion/NewQuestion';
-import EditQuestion from './components/Questions/EditQuestion/EditQuestion';
+// import EditQuestion from './components/Questions/EditQuestion/EditQuestion';//?for non-redux version
+// import Questions from './components/Questions/Questions';//?for non-redux version
 // import Login from './components/Login/Login';//?for non-redux version
 // import Navbar from './components/Navbar/Navbar';//?for non-redux version
+// import Start from './components/Start/Start';//?for non-redux version
+import Start from './components/Start/StartContainer';
 import Navbar from './components/Navbar/NavbarContainer';
 import Login from './components/Login/LoginContainer';
+import Questions from './components/Questions/QuestionsContainer';
+import EditQuestion from './components/Questions/EditQuestion/EditQuestionContainer';
+
+
 
 
 class App extends Component {
-
-    state = {
-        questions: [],
-        editQuestion: null,
-        runningQuestionIndex: 0,
-        lastQuestionIndex: null,
-        runningQuestion: null,
-        userAnswer: null,
-        score: 0,
-        // isOpen: false,//?removed in customReducer
-        // isAuth: false,//?removed in authReducer
-        // token: undefined,//?removed in authReducer
-        // loginMessage: null,//?removed in authReducer
+    constructor(props) {
+        super(props)
+        this.state = {
+            questions: [],
+            lastQuestionIndex: null,
+            runningQuestion: null,
+            editQuestion: null,
+            runningQuestionIndex: 0,
+            userAnswer: null,
+            score: 0,
+            // isOpen: false,//?removed in customReducer
+            // isAuth: false,//?removed in authReducer
+            // token: undefined,//?removed in authReducer
+            // loginMessage: null,//?removed in authReducer
+        }
     }
+
 
 
     nextQuestion = this.nextQuestion.bind(this);
@@ -48,13 +58,14 @@ class App extends Component {
     // logout = this.logout.bind(this);
 
     componentDidMount() {
-        this.getQuestionsFromDB();
+        this.props.getQuestionsFromDBThunk();
         const token = localStorage.getItem('jwt');
         if (token) {
-            this.setState({
-                isAuth: true,
-                token: localStorage.getItem('jwt')
-            })
+            // this.setState({
+            //     isAuth: true,
+            //     token: localStorage.getItem('jwt')
+            // })
+            this.props.tokenTrue(token);
         }
     }
 
@@ -102,7 +113,7 @@ class App extends Component {
                 questions,
                 lastQuestionIndex: questions.length - 1,
                 runningQuestion: questions[0],
-                editQuestion: undefined
+                // editQuestion: undefined
             })
         } catch (error) {
             console.log(error)
@@ -148,7 +159,6 @@ class App extends Component {
     async addNewQuestion(question, answer_1, answer_2, answer_3, answer_4, correct) {
         const token = localStorage.getItem('jwt');
         axios.defaults.headers.common = { 'Authorization': token }
-
         const newQuestion = {
             question: question,
             answers: [answer_1, answer_2, answer_3, answer_4],
@@ -215,11 +225,11 @@ class App extends Component {
                 <div className="App">
                     <div className="container">
                         <Navbar
-                            // toggleModal={this.toggleModal}
-                            // isOpen={this.state.isOpen}
-                            resetState={this.resetState}
-                            getQuestionsFromDB={this.getQuestionsFromDB}
-                            isAuth={this.state.isAuth}
+                        // toggleModal={this.toggleModal}
+                        // isOpen={this.state.isOpen}
+                        // resetState={this.resetState}
+                        // getQuestionsFromDB={this.getQuestionsFromDB}
+                        // isAuth={this.state.isAuth}
                         // logout={this.logout}
                         />
                         <Route path="/" exact >
@@ -243,14 +253,14 @@ class App extends Component {
                         </Route>
                         <Route path="/questions">
                             <Questions
-                                questions={this.state.questions}
-                                removeQuestion={this.removeQuestion}
-                                getQuestionById={this.getQuestionById}
+                            // questions={this.state.questions}
+                            // removeQuestion={this.removeQuestion}
+                            // getQuestionById={this.getQuestionById}
                             // token={this.state.token}
                             />
                         </Route>
                         <Route path="/add">
-                            {this.state.token ?
+                            {this.props.token ?
                                 <NewQuestion
                                     addNewQuestion={this.addNewQuestion}
                                 /> :
@@ -268,10 +278,10 @@ class App extends Component {
                         </Route>
                         <Route path="/edit/:id"
                             history={this.history}>
-                            {this.state.editQuestion ?
+                            {this.props.editQuestion ?
                                 <EditQuestion
-                                    question={this.state.editQuestion}
-                                    editQuestion={this.editQuestion}
+                                // question={this.state.editQuestion}
+                                // editQuestion={this.editQuestion}
                                 /> :
                                 null}
                         </Route>
@@ -287,5 +297,7 @@ class App extends Component {
         );
     }
 }
+
+
 
 export default App;

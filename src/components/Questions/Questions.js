@@ -2,8 +2,8 @@ import React from 'react';
 import './Questions.scss';
 import { Link, withRouter } from 'react-router-dom';
 
-const Questions = ({ questions, removeQuestion, getQuestionById, history }) => {
-    const token = localStorage.getItem('jwt');//?temporary ? token is removed in authReducer
+let Questions = ({ questions, history, token,
+    removeQuestionThunk, getQuestionByIdThunk }) => {
     return (
         <div className="Questions">
             <div className="title">
@@ -17,6 +17,9 @@ const Questions = ({ questions, removeQuestion, getQuestionById, history }) => {
             </div>
             <div className="questions">
                 {questions.map((question, index) => {
+                    if (index === 5) {
+                        console.log("Yo", question.correct_answers);
+                    }
                     return (
                         <div key={question.question + index} className="question">
                             <div className="question__title">{question.question}</div>
@@ -24,7 +27,7 @@ const Questions = ({ questions, removeQuestion, getQuestionById, history }) => {
                                 {token ?
                                     <button
                                         className="question__delete btn btn-danger m-2"
-                                        onClick={() => { removeQuestion(question._id) }}
+                                        onClick={() => { removeQuestionThunk(question._id) }}
                                     >Видалити</button>
                                     :
                                     <button
@@ -37,7 +40,7 @@ const Questions = ({ questions, removeQuestion, getQuestionById, history }) => {
                                     {token ?
                                         <Link
                                             style={{ color: "white", textDecoration: "none" }}
-                                            onClick={() => { getQuestionById(question._id) }}
+                                            onClick={() => { getQuestionByIdThunk(question._id) }}
                                             to={'/edit/' + question._id}
                                         >Редагувати</Link>
                                         :
@@ -55,5 +58,5 @@ const Questions = ({ questions, removeQuestion, getQuestionById, history }) => {
         </div >
     );
 }
-
-export default withRouter(Questions);
+Questions = withRouter(Questions);
+export default Questions;

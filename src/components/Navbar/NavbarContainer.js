@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import { toggleModal } from '../../redux/actions/customActions';
 import { logoutThunk } from '../../redux/actions/authActions';
+import { getQuestionsFromDBThunk, resetState } from '../../redux/actions/questionsActions';
 import Navbar from './Navbar';
 
 
@@ -15,7 +16,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         toggleModal: () => dispatch(toggleModal()),
-        logout: () => dispatch(logoutThunk())
+        logout: () => dispatch(logoutThunk()),
+        getQuestionsFromDB: () => dispatch(getQuestionsFromDBThunk()),
+        resetState: () => dispatch(resetState())
     }
 }
 

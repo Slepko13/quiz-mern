@@ -1,4 +1,4 @@
-import { LOGIN_SUCCESS, LOGIN_FAILED, LOGOUT } from '../constants/constants';
+import { LOGIN_SUCCESS, LOGIN_FAILED, LOGOUT, TOKEN_TRUE } from '../constants/constants';
 
 const initialState = {
 
@@ -28,6 +28,12 @@ const authReducer = (state = initialState, action) => {
                 isAuth: false,
                 token: undefined,
                 loginMessage: null
+            }
+        case TOKEN_TRUE:
+            return {
+                ...state,
+                isAuth: true,
+                token: action.token
             }
         default:
             return state

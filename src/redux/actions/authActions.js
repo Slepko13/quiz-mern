@@ -1,4 +1,4 @@
-import { LOGIN_SUCCESS, LOGIN_FAILED, LOGOUT } from '../constants/constants';
+import { LOGIN_SUCCESS, LOGIN_FAILED, LOGOUT, TOKEN_TRUE } from '../constants/constants';
 import { authApi } from '../../api/api';
 
 
@@ -31,7 +31,7 @@ export const loginThunk = (email, password) => {
     }
 }
 
-const login_success = (token, message) => {
+export const login_success = (token, message) => {
     return {
         type: LOGIN_SUCCESS,
         token,
@@ -43,5 +43,13 @@ const login_failed = (message) => {
     return {
         type: LOGIN_FAILED,
         message
+    }
+}
+
+
+export const tokenTrue = (token) => {
+    return {
+        type: TOKEN_TRUE,
+        token
     }
 }

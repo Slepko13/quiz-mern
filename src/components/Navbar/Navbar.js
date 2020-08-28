@@ -3,14 +3,10 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import logo from '../../assets/img/mern-logo.png';
 import { Link } from 'react-router-dom';
 
-
-
-
 import './Navbar.scss';
 
-const Navbar = ({ toggleModal, isOpen, resetState, getQuestionsFromDB, isAuth, logout }) => {
+const Navbar = ({ toggleModal, isOpen, isAuth, logout, getQuestionsFromDB, resetState, }) => {
     console.log("isAuth", isAuth);
-    console.log("logout", logout);
 
     return (
         <div className="Navbar">

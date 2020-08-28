@@ -4,16 +4,18 @@ import { withRouter } from 'react-router-dom';
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import YupSchema from '../YupSchema';
 
-const EditQuestion = ({ question, editQuestion, history }) => {
+let EditQuestion = ({ question, editQuestionThunk, history, getQuestionsFromDBThunk }) => {
     let {
         _id: id,
         question: new_question,
         answers: [new_answer_1, new_answer_2, new_answer_3, new_answer_4],
         correct_answers: [correct_answer]
     } = question;
+    console.log("Correct answer : ", correct_answer);
 
 
     return (
+
         <div className="EditQuestion">
             <Formik
                 initialValues={{
@@ -28,7 +30,8 @@ const EditQuestion = ({ question, editQuestion, history }) => {
                 onSubmit={(values, { setSubmitting, resetForm }) => {
                     let { new_question, new_answer_1, new_answer_2, new_answer_3, new_answer_4, correct_answer } = values;
                     setSubmitting(true);
-                    editQuestion(id, new_question, new_answer_1, new_answer_2, new_answer_3, new_answer_4, correct_answer);
+                    editQuestionThunk(id, new_question, new_answer_1, new_answer_2, new_answer_3, new_answer_4, correct_answer);
+                    getQuestionsFromDBThunk();
                     history.push('/questions');
                 }}
             >
@@ -89,7 +92,6 @@ const EditQuestion = ({ question, editQuestion, history }) => {
                                     <ErrorMessage name="new_answer_4" />
                                 </div> : null}
                             </div>
-
                         </div>
                         <div className="title">Відредагуйте вірну відповідь(повинна співпадати з одним із варіантів)</div>
                         <div className="row">
@@ -105,7 +107,6 @@ const EditQuestion = ({ question, editQuestion, history }) => {
                                 </div> : null}
                             </div>
                         </div>
-
                         <div className="row">
                             <div className="col-12 col-md-6 col-lg-3 ">
                                 <input
@@ -118,7 +119,9 @@ const EditQuestion = ({ question, editQuestion, history }) => {
                 )}
             </Formik>
         </div>
+
+
     );
 }
-
-export default withRouter(EditQuestion);
+EditQuestion = withRouter(EditQuestion);
+export default EditQuestion;

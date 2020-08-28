@@ -6,7 +6,6 @@ import './Login.scss';
 
 
 const Login = ({ login, loginMessage, isAuth }) => {
-    console.log(login);
     return (
         <div className="Login">
             <div className="title">Для продовження роботи необхідна авторизація</div>
